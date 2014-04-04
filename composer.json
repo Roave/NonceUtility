@@ -1,0 +1,33 @@
+{
+  "name": "roave/roave-nonce-utility",
+  "description": "A utility component for handling nonces",
+  "type": "module",
+  "authors": [
+    {
+      "name": "Antoine Hedgecock",
+      "email": "antoine@roave.com"
+    }
+  ],
+  "require": {
+    "zendframework/zend-servicemanager": "~2.3.0",
+    "zendframework/zend-stdlib": "~2.3.0",
+    "zendframework/zend-math": "~2.3.0",
+    "zendframework/zend-http": "~2.3.0",
+    "doctrine/doctrine-module": "~0.8.0",
+    "php": ">=5.5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~3.7",
+    "squizlabs/php_codesniffer": "~1.5.2",
+    "satooshi/php-coveralls": "~0.6",
+  },
+
+  "autoload": {
+    "psr-0": {
+      "Roave\\NonceUtility": "src/"
+    },
+    "classmap": [
+      "./Module.php"
+    ]
+  }
+}

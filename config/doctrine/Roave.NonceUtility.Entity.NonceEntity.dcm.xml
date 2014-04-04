@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="Roave\NonceUtility\Entity\NonceEntity" table="roave_nonces">
+
+        <unique-constraints>
+            <unique-constraint columns="token"/>
+        </unique-constraints>
+
+        <id name="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="token"     type="string"/>
+        <field name="namespace" type="string"/>
+
+        <!-- Useful information about consumption -->
+        <field name="ipAddress"     type="string"/>
+        <field name="httpUserAgent" type="string"/>
+
+        <!-- Dates -->
+        <field name="createdAt"  type="datetime"/>
+        <field name="expiresAt"  type="datetime" nullable="true"/>
+        <field name="consumedAt" type="datetime" nullable="true"/>
+
+        <many-to-one target-entity="Roave\NonceUtility\Stdlib\NonceOwnerInterface" field="owner">
+            <join-column on-delete="CASCADE"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>
