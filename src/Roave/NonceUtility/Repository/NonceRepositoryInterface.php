@@ -39,7 +39,7 @@
  */
 namespace Roave\NonceUtility\Repository;
 
-use Roave\NonceUtility\NonceEntity;
+use Roave\NonceUtility\Entity\NonceEntity;
 use Roave\NonceUtility\Stdlib\NonceOwnerInterface;
 
 interface NonceRepositoryInterface
@@ -48,23 +48,23 @@ interface NonceRepositoryInterface
      * Retrieve a nonce entity by it's token and namespace
      *
      * @param NonceOwnerInterface $owner
-     * @param string              $token
+     * @param string              $nonce
      * @param string              $namespace
      *
      * @return NonceEntity|null
      */
-    public function get(NonceOwnerInterface $owner, $token, $namespace = 'default');
+    public function get(NonceOwnerInterface $owner, $nonce, $namespace = 'default');
 
     /**
      * Check if a token exists within the given namespace
      *
      * @param NonceOwnerInterface $owner
-     * @param string              $token
+     * @param string              $nonce
      * @param string              $namespace
      *
      * @return bool
      */
-    public function has(NonceOwnerInterface $owner, $token, $namespace = 'default');
+    public function has(NonceOwnerInterface $owner, $nonce, $namespace = 'default');
 
     /**
      * Remove all the expired tokens

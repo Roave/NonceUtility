@@ -42,7 +42,7 @@ namespace Roave\NonceUtility\Repository;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Roave\NonceUtility\NonceEntity;
+use Roave\NonceUtility\Stdlib\NonceOwnerInterface;
 
 class NonceRepository implements NonceRepositoryInterface
 {
@@ -60,37 +60,27 @@ class NonceRepository implements NonceRepositoryInterface
     }
 
     /**
-     * Retrieve a nonce entity by it's token and namespace
-     *
-     * @param string $token
-     * @param string $namespace
-     *
-     * @return NonceEntity|null
+     * {@inheritdoc}
      */
-    public function get($token, $namespace = 'default')
+    public function get(NonceOwnerInterface $owner, $nonce, $namespace = 'default')
     {
-        return $this->objectRepository->findOneBy(['token' => $token, 'namespace' => $namespace]);
+        return $this->objectRepository->findOneBy([
+            'owner' => $owner->getId(),
+            'token' => $nonce,
+            'namespace' => $namespace
+        ]);
     }
 
     /**
-     * Check if a token exists within the given namespace
-     *
-     * @param string $token
-     * @param string $namespace
-     *
-     * @return bool
+     * {@Inheritdoc}
      */
-    public function has($token, $namespace = 'default')
+    public function has(NonceOwnerInterface $owner, $nonce, $namespace = 'default')
     {
-        return $this->get($token, $namespace) !== null;
+        return $this->get($owner, $nonce, $namespace) !== null;
     }
 
     /**
-     * Remove all the expired tokens
-     *
-     * @throws \DomainException When the implementation is not available.
-     *
-     * @return void
+     * {@Inheritdoc}
      */
     public function garbageCollect()
     {

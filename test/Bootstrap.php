@@ -56,14 +56,13 @@ if (! isset($loader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you install via composer?');
 }
 
-$loader->add('Roave\\NonceUtilityTest\\', __DIR__);
+$loader->add('Roave\\NonceUtilityTest', __DIR__);
 
 $configFiles = array(__DIR__ . '/TestConfiguration.php', __DIR__ . '/TestConfiguration.php.dist');
 
 foreach ($configFiles as $configFile) {
     if (file_exists($configFile)) {
         $config = require $configFile;
-
         break;
     }
 }

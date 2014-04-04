@@ -45,5 +45,5 @@ interface NonceOwnerInterface
     /**
      * @return mixed
      */
-    public function getById();
+    public function getId();
 }

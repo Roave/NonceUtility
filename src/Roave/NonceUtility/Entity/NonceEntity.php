@@ -38,7 +38,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
 
-namespace Roave\NonceUtility;
+namespace Roave\NonceUtility\Entity;
 
 use DateTime;
 use Roave\NonceUtility\Stdlib\NonceOwnerInterface;

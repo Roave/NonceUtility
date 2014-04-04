@@ -42,7 +42,7 @@ namespace Roave\NonceUtility\Service;
 use DateInterval;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
-use Roave\NonceUtility\NonceEntity;
+use Roave\NonceUtility\Entity\NonceEntity;
 use Roave\NonceUtility\Repository\NonceRepositoryInterface;
 use Roave\NonceUtility\Stdlib\NonceOwnerInterface;
 use Zend\Http\PhpEnvironment\RemoteAddress;
@@ -116,7 +116,7 @@ class NonceService implements NonceServiceInterface
         }
 
         $now = new DateTime();
-        if ($nonce->getExpiresAt() < $now) {
+        if ($nonce->getExpiresAt() !== null && $nonce->getExpiresAt() < $now) {
             throw new Exception\NonceHasExpiredException;
         }
 
