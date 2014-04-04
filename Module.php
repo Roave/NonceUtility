@@ -38,7 +38,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
 
-namespace Roave\NonceUtil;
+namespace Roave\NonceUtility;
 
 use Zend\Loader\StandardAutoloader;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
@@ -56,7 +56,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
         return array(
             StandardAutoloader::class => array(
                 StandardAutoloader::LOAD_NS => array(
-                    __NAMESPACE__ => __DIR__ . '/src/Roave/EmailTemplates'
+                    __NAMESPACE__ => __DIR__ . '/src/Roave/NonceUtility'
                 )
             )
         );
