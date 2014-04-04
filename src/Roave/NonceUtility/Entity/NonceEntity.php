@@ -160,7 +160,7 @@ class NonceEntity
     /**
      * @param DateTime|null $createdAt
      */
-    public function setCreatedAt(DateTime $createdAt =  null)
+    public function setCreatedAt(DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
     }

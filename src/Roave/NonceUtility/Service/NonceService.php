@@ -75,8 +75,12 @@ class NonceService implements NonceServiceInterface
     /**
      * {@Inheritdoc}
      */
-    public function createNonce(NonceOwnerInterface $owner, $namespace = 'default', DateInterval $expiresIn = null, $length = 10)
-    {
+    public function createNonce(
+        NonceOwnerInterface $owner,
+        $namespace = 'default',
+        DateInterval $expiresIn = null,
+        $length = 10
+    ) {
         do {
             $nonce = strtr(Rand::getString($length), '+/', '-_');
         } while ($this->repository->has($owner, $nonce, $namespace));
@@ -103,8 +107,12 @@ class NonceService implements NonceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function consume(NonceOwnerInterface $owner, $nonce, $namespace = 'default', RequestInterface $request = null)
-    {
+    public function consume(
+        NonceOwnerInterface $owner,
+        $nonce,
+        $namespace = 'default',
+        RequestInterface $request = null
+    ) {
         $nonce = $this->repository->get($owner, $nonce, $namespace);
 
         if (! $nonce) {

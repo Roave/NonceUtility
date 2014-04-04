@@ -41,7 +41,7 @@
 namespace Roave\NonceUtility\Service;
 
 use DateInterval;
-use Roave\NonceUtility\NonceEntity;
+use Roave\NonceUtility\Entity\NonceEntity;
 use Roave\NonceUtility\Stdlib\NonceOwnerInterface;
 use Zend\Stdlib\RequestInterface;
 
@@ -57,7 +57,12 @@ interface NonceServiceInterface
      *
      * @return NonceEntity
      */
-    public function createNonce(NonceOwnerInterface $owner, $namespace = 'default', DateInterval $expiresIn = null, $length = 10);
+    public function createNonce(
+        NonceOwnerInterface $owner,
+        $namespace = 'default',
+        DateInterval $expiresIn = null,
+        $length = 10
+    );
 
     /**
      * Consume a nonce
@@ -69,5 +74,10 @@ interface NonceServiceInterface
      *
      * @return void
      */
-    public function consume(NonceOwnerInterface $owner, $nonce, $namespace = 'default', RequestInterface $request = null);
+    public function consume(
+        NonceOwnerInterface $owner,
+        $nonce,
+        $namespace = 'default',
+        RequestInterface $request = null
+    );
 }
