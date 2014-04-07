@@ -39,7 +39,7 @@
  */
 namespace Roave\NonceUtility\Factory\Repository;
 
-use Roave\NonceUtility\NonceEntity;
+use Roave\NonceUtility\Entity\NonceEntity;
 use Roave\NonceUtility\Repository\NonceRepository;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
