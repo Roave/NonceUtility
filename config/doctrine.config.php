@@ -42,7 +42,7 @@ use Doctrine\ORM\Mapping\Driver\XmlDriver;
 
 return [
     'driver' => [
-        'roave_email-templates_xml_driver' => [
+        'roave_nonce-utility_xml_driver' => [
             'class'     => XmlDriver::class,
             'paths'     => [
                 'default' => __DIR__ . '/doctrine',
@@ -51,7 +51,7 @@ return [
 
         'orm_default' => [
             'drivers' => [
-                'Roave\NonceUtility\Entity' => 'roave_email-templates_xml_driver'
+                'Roave\NonceUtility\Entity' => 'roave_nonce-utility_xml_driver'
             ]
         ]
     ]

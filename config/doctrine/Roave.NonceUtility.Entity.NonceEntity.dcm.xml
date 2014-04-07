@@ -6,16 +6,8 @@
 
     <entity name="Roave\NonceUtility\Entity\NonceEntity" table="roave_nonces">
 
-        <unique-constraints>
-            <unique-constraint columns="token"/>
-        </unique-constraints>
-
-        <id name="id" type="integer">
-            <generator strategy="AUTO"/>
-        </id>
-
-        <field name="token"     type="string"/>
-        <field name="namespace" type="string"/>
+        <id name="nonce"     type="string"/>
+        <id name="namespace" type="string"/>
 
         <!-- Useful information about consumption -->
         <field name="ipAddress"     type="string"/>
