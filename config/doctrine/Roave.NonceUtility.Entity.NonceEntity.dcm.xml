@@ -10,8 +10,8 @@
         <id name="namespace" type="string"/>
 
         <!-- Useful information about consumption -->
-        <field name="ipAddress"     type="string"/>
-        <field name="httpUserAgent" type="string"/>
+        <field name="ipAddress"     type="string" nullable="true"/>
+        <field name="httpUserAgent" type="string" nullable="true"/>
 
         <!-- Dates -->
         <field name="createdAt"  type="datetime"/>

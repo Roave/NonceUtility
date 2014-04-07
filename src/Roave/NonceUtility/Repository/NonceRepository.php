@@ -65,8 +65,8 @@ class NonceRepository implements NonceRepositoryInterface
     public function get(NonceOwnerInterface $owner, $nonce, $namespace = 'default')
     {
         return $this->objectRepository->findOneBy([
-            'owner' => $owner->getId(),
-            'token' => $nonce,
+            'owner'     => $owner->getId(),
+            'nonce'     => $nonce,
             'namespace' => $namespace
         ]);
     }
