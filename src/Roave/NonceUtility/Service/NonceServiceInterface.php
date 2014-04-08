@@ -72,6 +72,10 @@ interface NonceServiceInterface
      * @param string              $namespace
      * @param RequestInterface    $request
      *
+     * @throws Exception\NonceNotFoundException
+     * @throws Exception\NonceAlreadyConsumedException
+     * @throws Exception\NonceHasExpiredException
+     *
      * @return void
      */
     public function consume(
