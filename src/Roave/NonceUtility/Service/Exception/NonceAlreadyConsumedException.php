@@ -40,6 +40,12 @@
 
 namespace Roave\NonceUtility\Service\Exception;
 
+use Exception;
+
 class NonceAlreadyConsumedException extends RuntimeException
 {
+    public function __construct($message = 'Nonce already consumed', $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }

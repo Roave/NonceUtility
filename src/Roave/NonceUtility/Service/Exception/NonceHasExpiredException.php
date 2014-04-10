@@ -40,6 +40,12 @@
 
 namespace Roave\NonceUtility\Service\Exception;
 
+use Exception;
+
 class NonceHasExpiredException extends RuntimeException
 {
+    public function __construct($message = 'Nonce has expired.', $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }
