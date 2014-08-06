@@ -1,7 +1,7 @@
 # Roave\NonceUtility
 [![Build Status](https://travis-ci.org/Roave/NonceUtility.svg)](https://travis-ci.org/Roave/NonceUtility)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Roave/NonceUtility/badges/quality-score.png?s=fb98249a8f4b452b399bc0696f155bed8441cc80)](https://scrutinizer-ci.com/g/Roave/NonceUtility/)
-[![Coverage Status](https://coveralls.io/repos/Roave/NonceUtility/badge.png?branch=master)](https://coveralls.io/r/Roave/NonceUtility?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Roave/NonceUtility/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Roave/NonceUtility/build-status/master)
 
 A simple module that helps with managing nonces
 
