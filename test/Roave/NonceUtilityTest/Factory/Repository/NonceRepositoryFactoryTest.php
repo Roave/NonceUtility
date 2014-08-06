@@ -16,12 +16,16 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Class NonceRepositoryFactoryTest
  *
- * @covers \Roave\NonceUtility\Factory\Repository\NonceRepositoryFactory
+ * @coversDefaultClass \Roave\NonceUtility\Factory\Repository\NonceRepositoryFactory
+ * @covers ::<!public>
  *
  * @group factory
  */
 class NonceRepositoryFactoryTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers ::createService
+     */
     public function testCreateService()
     {
         $factory = new NonceRepositoryFactory();
