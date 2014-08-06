@@ -23,7 +23,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class NonceRepositoryFactoryTest extends PHPUnit_Framework_TestCase
 {
-    public function testCreate()
+    public function testCreateService()
     {
         $factory = new NonceRepositoryFactory();
 
