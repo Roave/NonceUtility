@@ -22,6 +22,7 @@ use Zend\Http\Request as HttpRequest;
  * Class NonceServiceTest
  *
  * @coversDefaultClass \Roave\NonceUtility\Service\NonceService
+ * @covers ::<!public>
  *
  * @group unit
  */
