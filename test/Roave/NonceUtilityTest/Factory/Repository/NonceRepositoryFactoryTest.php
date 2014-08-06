@@ -17,7 +17,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * Class NonceRepositoryFactoryTest
  *
  * @covers \Roave\NonceUtility\Factory\Repository\NonceRepositoryFactory
- * @covers ::<!public>
  *
  * @group factory
  */
