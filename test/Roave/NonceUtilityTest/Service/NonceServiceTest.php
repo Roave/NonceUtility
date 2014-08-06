@@ -8,6 +8,7 @@ namespace Roave\NonceUtilityTest\Service;
 use DateInterval;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject;
 use Roave\NonceUtility\Entity\NonceEntity;
 use Roave\NonceUtility\Repository\NonceRepositoryInterface;
 use Roave\NonceUtility\Service\Exception\NonceAlreadyConsumedException;
@@ -17,20 +18,27 @@ use Roave\NonceUtility\Service\NonceService;
 use Roave\NonceUtility\Stdlib\NonceOwnerInterface;
 use Zend\Http\Request as HttpRequest;
 
+/**
+ * Class NonceServiceTest
+ *
+ * @coversDefaultClass \Roave\NonceUtility\Service\NonceService
+ *
+ * @group unit
+ */
 class NonceServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|NonceOwnerInterface
+     * @var PHPUnit_Framework_MockObject_MockObject|NonceOwnerInterface
      */
     protected $owner;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|NonceRepositoryInterface
+     * @var PHPUnit_Framework_MockObject_MockObject|NonceRepositoryInterface
      */
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @var PHPUnit_Framework_MockObject_MockObject|ObjectManager
      */
     protected $objectManager;
 
@@ -39,6 +47,9 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected $service;
 
+    /**
+     * @covers ::__construct
+     */
     protected function setUp()
     {
         $this->owner         = $this->getMock(NonceOwnerInterface::class);
@@ -51,6 +62,9 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ::createNonce
+     */
     public function testCreateNonceTestUniqueToken()
     {
         $this->repository
@@ -72,12 +86,19 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $this->service->createNonce($this->owner);
+        $nonce = $this->service->createNonce($this->owner);
+
+        $this->assertInstanceOf(NonceEntity::class, $nonce);
     }
 
+    /**
+     * @covers ::createNonce
+     */
     public function testCreateWithExpirationDate()
     {
-        $interval = new DateInterval('PT10M');
+        $interval         = new DateInterval('PT10M');
+        $expectedDateTime = new DateTime();
+        $expectedDateTime->add($interval);
 
         $this->repository
             ->expects($this->once())
@@ -87,17 +108,17 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         $this->objectManager
             ->expects($this->once())
             ->method('persist')
-            ->with($this->callback(function (NonceEntity $nonce) use ($interval) {
+            ->with($this->isInstanceOf(NonceEntity::class));
 
-                $expiresAt = new DateTime();
-                $expiresAt->add($interval);
+        $nonce = $this->service->createNonce($this->owner, 'default', $interval);
 
-                return $nonce->getExpiresAt() == $expiresAt;
-            }));
-
-        $this->service->createNonce($this->owner, 'default', $interval);
+        $this->assertInstanceOf(NonceEntity::class, $nonce);
+        $this->assertEquals($expectedDateTime, $nonce->getExpiresAt());
     }
 
+    /**
+     * @covers ::createNonce
+     */
     public function testCreateWithLength()
     {
         $length = 20;
@@ -110,20 +131,25 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         $this->objectManager
             ->expects($this->once())
             ->method('persist')
-            ->with($this->callback(function (NonceEntity $nonce) use ($length) {
+            ->with($this->isInstanceOf(NonceEntity::class));
 
-                return strlen($nonce->getNonce()) == $length;
-            }));
+        $nonce = $this->service->createNonce($this->owner, 'default', null, $length);
 
-        $this->service->createNonce($this->owner, 'default', null, $length);
+        $this->assertEquals($length, strlen($nonce->getNonce()));
     }
 
+    /**
+     * @covers ::consume
+     */
     public function testConsumeWithMissingNonce()
     {
         $this->setExpectedException(NonceNotFoundException::class);
         $this->service->consume($this->owner, '');
     }
 
+    /**
+     * @covers ::consume
+     */
     public function testConsumeWithAlreadyConsumedNonce()
     {
         $nonce = new NonceEntity();
@@ -138,6 +164,9 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->consume($this->owner, 'nonce');
     }
 
+    /**
+     * @covers ::consume
+     */
     public function testConsumeWithExpiredNonce()
     {
         $yesterday = new DateTime();
@@ -155,6 +184,9 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->consume($this->owner, 'nonce');
     }
 
+    /**
+     * @covers ::consume
+     */
     public function testConsumeWithHttpRequest()
     {
         $nonce = $this->getMock(NonceEntity::class);
@@ -173,7 +205,6 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($nonce));
 
-
         $this->objectManager
             ->expects($this->once())
             ->method('flush');
@@ -184,6 +215,9 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->consume($this->owner, '', 'default', $request);
     }
 
+    /**
+     * @covers ::consume
+     */
     public function testConsume()
     {
         $nonce = $this->getMock(NonceEntity::class);
@@ -201,11 +235,9 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($nonce));
 
-
         $this->objectManager
             ->expects($this->once())
             ->method('flush');
-
 
         $this->service->consume($this->owner, '');
     }
