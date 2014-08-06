@@ -5,7 +5,8 @@ return array(
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(
-            __DIR__ . '/../config/module.config.php'
+            __DIR__ . '/../config/autoload',
+            __DIR__ . '/config',
         ),
         'module_paths' => array(
             'module',
