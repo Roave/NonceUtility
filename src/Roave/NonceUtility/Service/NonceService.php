@@ -50,15 +50,18 @@ use Zend\Http\Request as HttpRequest;
 use Zend\Math\Rand;
 use Zend\Stdlib\RequestInterface;
 
+/**
+ * Class NonceService
+ */
 class NonceService implements NonceServiceInterface
 {
     /**
-     * @var \Roave\NonceUtility\Repository\NonceRepositoryInterface
+     * @var NonceRepositoryInterface
      */
     private $repository;
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 

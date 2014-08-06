@@ -83,7 +83,7 @@ class NonceEntity
     /**
      * @var NonceOwnerInterface
      */
-    protected $owner;
+    protected $owner = null;
 
     /**
      * @return null|string
@@ -98,7 +98,7 @@ class NonceEntity
      */
     public function setHttpUserAgent($httpUserAgent)
     {
-        $this->httpUserAgent = $httpUserAgent;
+        $this->httpUserAgent = (string) $httpUserAgent;
     }
 
     /**
@@ -114,7 +114,7 @@ class NonceEntity
      */
     public function setIpAddress($ipAddress)
     {
-        $this->ipAddress = $ipAddress;
+        $this->ipAddress = (string) $ipAddress;
     }
 
     /**
@@ -130,7 +130,7 @@ class NonceEntity
      */
     public function setNamespace($namespace)
     {
-        $this->namespace = $namespace;
+        $this->namespace = (string) $namespace;
     }
 
     /**
@@ -206,10 +206,10 @@ class NonceEntity
     }
 
     /**
-     * @param string $token
+     * @param string $nonce
      */
-    public function setNonce($token)
+    public function setNonce($nonce)
     {
-        $this->nonce = $token;
+        $this->nonce = (string) $nonce;
     }
 }
