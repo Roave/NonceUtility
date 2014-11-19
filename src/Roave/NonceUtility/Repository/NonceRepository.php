@@ -86,7 +86,7 @@ class NonceRepository implements NonceRepositoryInterface
     {
         if (! $this->objectRepository instanceof EntityRepository) {
             throw new \DomainException('Not yet implemented');
-        } 
+        }
         
         /** @var QueryBuilder $builder */
         $builder = $this->objectRepository->createQueryBuilder('nonce');
