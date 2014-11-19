@@ -84,21 +84,19 @@ class NonceRepository implements NonceRepositoryInterface
      */
     public function garbageCollect()
     {
-        if ($this->objectRepository instanceof EntityRepository) {
-
-            /** @var QueryBuilder $builder */
-            $builder = $this->objectRepository->createQueryBuilder('nonce');
-            $builder
-                ->delete()
-                ->andWhere('nonce.expiresAt IS NOT NULL')
-                ->andWhere('nonce.expiresAt < CURRENT_TIMESTAMP()')
-                ->andWhere('nonce.consumedAt IS NULL');
-
-            $query = $builder->getQuery();
-            $query->execute();
-
-        } else {
+        if (! $this->objectRepository instanceof EntityRepository) {
             throw new \DomainException('Not yet implemented');
         }
+        
+        /** @var QueryBuilder $builder */
+        $builder = $this->objectRepository->createQueryBuilder('nonce');
+        $builder
+            ->delete()
+            ->andWhere('nonce.expiresAt IS NOT NULL')
+            ->andWhere('nonce.expiresAt < CURRENT_TIMESTAMP()')
+            ->andWhere('nonce.consumedAt IS NULL');
+
+        $query = $builder->getQuery();
+        $query->execute();
     }
 }
