@@ -9,11 +9,11 @@
     }
   ],
   "require": {
-    "zendframework/zend-servicemanager": "~2.3.0",
-    "zendframework/zend-stdlib": "~2.3.0",
-    "zendframework/zend-math": "~2.3.0",
-    "zendframework/zend-http": "~2.3.0",
-    "doctrine/doctrine-module": "~0.8.0",
+    "zendframework/zend-servicemanager": "~2.4",
+    "zendframework/zend-stdlib": "~2.4",
+    "zendframework/zend-math": "~2.4",
+    "zendframework/zend-http": "~2.4",
+    "doctrine/doctrine-module": "~0.8",
     "php": ">=5.5.0"
   },
   "require-dev": {
