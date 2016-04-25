@@ -83,7 +83,7 @@ class NonceRepository implements NonceRepositoryInterface
     /**
      * {@Inheritdoc}
      */
-    public function has(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default')
+    public function has(NonceOwnerInterface $owner, $nonce, $namespace = 'default')
     {
         return $this->get($owner, $nonce, $namespace) !== null;
     }
