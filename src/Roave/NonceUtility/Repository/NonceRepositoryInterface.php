@@ -53,7 +53,17 @@ interface NonceRepositoryInterface
      *
      * @return NonceEntity|null
      */
-    public function get(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default');
+    public function get(NonceOwnerInterface $owner, $nonce, $namespace = 'default');
+
+    /**
+     * Retrieve a nonce entity without an associated owner by token and namespace
+     *
+     * @param $nonce
+     * @param string $namespace
+     *
+     * @return NonceEntity|null
+     */
+    public function getUnassociated($nonce, $namespace = 'default');
 
     /**
      * Check if a token exists within the given namespace
@@ -64,7 +74,17 @@ interface NonceRepositoryInterface
      *
      * @return bool
      */
-    public function has(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default');
+    public function has(NonceOwnerInterface $owner, $nonce, $namespace = 'default');
+
+    /**
+     * Check if a nonce entity without an associated owner exists within the given namespace
+     *
+     * @param $nonce
+     * @param string $namespace
+     *
+     * @return bool
+     */
+    public function hasUnassociated($nonce, $namespace = 'default');
 
     /**
      * Remove all the expired tokens

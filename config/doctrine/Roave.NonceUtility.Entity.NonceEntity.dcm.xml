@@ -19,7 +19,7 @@
         <field name="consumedAt" type="datetime" nullable="true"/>
 
         <many-to-one target-entity="Roave\NonceUtility\Stdlib\NonceOwnerInterface" field="owner">
-            <join-column on-delete="CASCADE"/>
+            <join-column on-delete="CASCADE" nullable="true"/>
         </many-to-one>
     </entity>
 </doctrine-mapping>

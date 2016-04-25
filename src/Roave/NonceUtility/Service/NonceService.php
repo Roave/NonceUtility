@@ -76,18 +76,20 @@ class NonceService implements NonceServiceInterface
     }
 
     /**
-     * {@Inheritdoc}
+     * Creates and persists a nonce entity
+     *
+     * @param $nonce
+     * @param NonceOwnerInterface|null $owner
+     * @param DateInterval|null $expiresIn
+     * @param string $namespace
+     * @return NonceEntity
      */
-    public function createNonce(
+    private function _create(
+        $nonce,
         NonceOwnerInterface $owner = null,
-        $namespace = 'default',
         DateInterval $expiresIn = null,
-        $length = 10
+        $namespace = 'default'
     ) {
-        do {
-            $nonce = strtr(Rand::getString($length), '+/', '-_');
-        } while ($this->repository->has($owner, $nonce, $namespace));
-
         $entity = new NonceEntity();
         $entity->setOwner($owner);
         $entity->setNonce($nonce);
@@ -107,16 +109,17 @@ class NonceService implements NonceServiceInterface
         return $entity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function consume(
-        NonceOwnerInterface $owner = null,
+    private function _consume(
         $nonce,
+        NonceOwnerInterface $owner = null,
         $namespace = 'default',
         RequestInterface $request = null
     ) {
-        $nonce = $this->repository->get($owner, $nonce, $namespace);
+        if ($owner) {
+            $nonce = $this->repository->get($owner, $nonce, $namespace);
+        } else {
+            $nonce = $this->repository->getUnassociated($nonce, $namespace);
+        }
 
         if (! $nonce) {
             throw new Exception\NonceNotFoundException;
@@ -145,5 +148,53 @@ class NonceService implements NonceServiceInterface
         }
 
         $this->objectManager->flush();
+    }
+
+    /**
+     * {@Inheritdoc}
+     */
+    public function createNonce(
+        NonceOwnerInterface $owner,
+        $namespace = 'default',
+        DateInterval $expiresIn = null,
+        $length = 10
+    ) {
+        do {
+            $nonce = strtr(Rand::getString($length), '+/', '-_');
+        } while ($this->repository->has($owner, $nonce, $namespace));
+
+        return $this->_create($owner, $expiresIn, $namespace);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createUnassociatedNonce($namespace = 'default', DateInterval $expiresIn = null, $length = 10)
+    {
+        do {
+            $nonce = strtr(Rand::getString($length), '+/', '-_');
+        } while ($this->repository->hasUnassociated($nonce, $namespace));
+
+        return $this->_create($nonce, null, $expiresIn, $namespace);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function consume(
+        NonceOwnerInterface $owner,
+        $nonce,
+        $namespace = 'default',
+        RequestInterface $request = null
+    ) {
+        $this->_consume($nonce, $owner, $namespace, $request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function consumeUnassociated($nonce, $namespace = 'default', RequestInterface $request = null)
+    {
+        $this->_consume($nonce, null, $namespace, $request);
     }
 }
