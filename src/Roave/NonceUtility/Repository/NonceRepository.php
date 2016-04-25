@@ -62,10 +62,10 @@ class NonceRepository implements NonceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function get(NonceOwnerInterface $owner, $nonce, $namespace = 'default')
+    public function get(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default')
     {
         return $this->objectRepository->findOneBy([
-            'owner'     => $owner->getId(),
+            'owner'     => $owner ? $owner->getId() : null,
             'nonce'     => $nonce,
             'namespace' => $namespace
         ]);
@@ -74,7 +74,7 @@ class NonceRepository implements NonceRepositoryInterface
     /**
      * {@Inheritdoc}
      */
-    public function has(NonceOwnerInterface $owner, $nonce, $namespace = 'default')
+    public function has(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default')
     {
         return $this->get($owner, $nonce, $namespace) !== null;
     }

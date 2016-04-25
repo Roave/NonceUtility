@@ -79,7 +79,7 @@ class NonceService implements NonceServiceInterface
      * {@Inheritdoc}
      */
     public function createNonce(
-        NonceOwnerInterface $owner,
+        NonceOwnerInterface $owner = null,
         $namespace = 'default',
         DateInterval $expiresIn = null,
         $length = 10
@@ -111,7 +111,7 @@ class NonceService implements NonceServiceInterface
      * {@inheritdoc}
      */
     public function consume(
-        NonceOwnerInterface $owner,
+        NonceOwnerInterface $owner = null,
         $nonce,
         $namespace = 'default',
         RequestInterface $request = null

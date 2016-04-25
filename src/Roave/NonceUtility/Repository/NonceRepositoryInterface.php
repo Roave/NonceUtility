@@ -53,7 +53,7 @@ interface NonceRepositoryInterface
      *
      * @return NonceEntity|null
      */
-    public function get(NonceOwnerInterface $owner, $nonce, $namespace = 'default');
+    public function get(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default');
 
     /**
      * Check if a token exists within the given namespace
@@ -64,7 +64,7 @@ interface NonceRepositoryInterface
      *
      * @return bool
      */
-    public function has(NonceOwnerInterface $owner, $nonce, $namespace = 'default');
+    public function has(NonceOwnerInterface $owner = null, $nonce, $namespace = 'default');
 
     /**
      * Remove all the expired tokens
