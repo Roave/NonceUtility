@@ -109,4 +109,64 @@ class NonceRepositoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($repository->has($owner, 'testCase'));
     }
+
+    /**
+     * @covers ::getUnassociated
+     */
+    public function testGetUnassociated()
+    {
+        $nonce     = 'roaveIsAwesome';
+        $namespace = 'partyRoom';
+
+        $nonceObject = new NonceEntity();
+
+        $this->objectRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['owner' => null, 'nonce' => $nonce, 'namespace' => $namespace])
+            ->will($this->returnValue($nonceObject));
+
+        $result = $this->repository->getUnassociated($nonce, $namespace);
+        $this->assertSame($nonceObject, $result);
+    }
+
+    /**
+     * @covers ::hasUnassociated
+     */
+    public function testHasUnassociatedWithFalseResponse()
+    {
+        $builder = $this->getMockBuilder(NonceRepository::class);
+        $builder
+            ->setMethods(['getUnassociated'])
+            ->disableOriginalConstructor();
+
+        /** @var NonceRepository|PHPUnit_Framework_MockObject_MockObject $repository */
+        $repository = $builder->getMock();
+        $repository
+            ->expects($this->once())
+            ->method('getUnassociated')
+            ->will($this->returnValue(null));
+
+        $this->assertFalse($repository->hasUnassociated('testCase'));
+    }
+
+    /**
+     * @covers ::hasUnassociated
+     */
+    public function testHasUnassociatedWithTrueResponse()
+    {
+        $builder = $this->getMockBuilder(NonceRepository::class);
+        $builder
+            ->setMethods(['getUnassociated'])
+            ->disableOriginalConstructor();
+
+        /** @var NonceRepository|PHPUnit_Framework_MockObject_MockObject $repository */
+        $repository = $builder->getMock();
+        $repository
+            ->expects($this->once())
+            ->method('getUnassociated')
+            ->will($this->returnValue(new NonceEntity()));
+
+        $this->assertTrue($repository->hasUnassociated('testCase'));
+    }
 }
