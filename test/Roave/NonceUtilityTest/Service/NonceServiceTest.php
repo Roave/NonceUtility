@@ -87,7 +87,7 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $nonce = $this->service->createNonce($this->owner);
+        $nonce = $this->service->create($this->owner);
 
         $this->assertInstanceOf(NonceEntity::class, $nonce);
     }
@@ -111,7 +111,7 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('persist')
             ->with($this->isInstanceOf(NonceEntity::class));
 
-        $nonce = $this->service->createNonce($this->owner, 'default', $interval);
+        $nonce = $this->service->create($this->owner, 'default', $interval);
 
         $this->assertInstanceOf(NonceEntity::class, $nonce);
         $this->assertEquals($expectedDateTime, $nonce->getExpiresAt());
@@ -134,7 +134,7 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('persist')
             ->with($this->isInstanceOf(NonceEntity::class));
 
-        $nonce = $this->service->createNonce($this->owner, 'default', null, $length);
+        $nonce = $this->service->create($this->owner, 'default', null, $length);
 
         $this->assertEquals($length, strlen($nonce->getNonce()));
     }
