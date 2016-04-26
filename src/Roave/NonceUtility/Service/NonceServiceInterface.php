@@ -105,5 +105,5 @@ interface NonceServiceInterface
      *
      * @return void
      */
-    public function consumeUnassociated($nonce ,$namespace = 'default', RequestInterface $request = null);
+    public function consumeUnassociated($nonce, $namespace = 'default', RequestInterface $request = null);
 }
