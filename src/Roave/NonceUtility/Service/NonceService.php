@@ -78,7 +78,7 @@ class NonceService implements NonceServiceInterface
     /**
      * Creates and persists a nonce entity
      *
-     * @param $nonce
+     * @param string $nonce
      * @param NonceOwnerInterface|null $owner
      * @param DateInterval|null $expiresIn
      * @param string $namespace

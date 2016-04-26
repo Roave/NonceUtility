@@ -99,7 +99,7 @@ interface NonceServiceInterface
     /**
      * Consume a nonce without an associated owner
      *
-     * @param $nonce
+     * @param string $nonce
      * @param string $namespace
      * @param RequestInterface|null $request
      *

@@ -52,7 +52,7 @@ class NonceServiceFactory implements FactoryInterface
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return mixed
+     * @return NonceService
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

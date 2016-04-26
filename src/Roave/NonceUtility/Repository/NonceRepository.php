@@ -71,6 +71,9 @@ class NonceRepository implements NonceRepositoryInterface
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUnassociated($nonce, $namespace = 'default')
     {
         return $this->objectRepository->findOneBy([
@@ -88,6 +91,9 @@ class NonceRepository implements NonceRepositoryInterface
         return $this->get($owner, $nonce, $namespace) !== null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasUnassociated($nonce, $namespace = 'default')
     {
         return $this->getUnassociated($nonce, $namespace) !== null;
