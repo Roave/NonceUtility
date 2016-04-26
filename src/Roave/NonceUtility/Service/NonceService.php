@@ -84,7 +84,7 @@ class NonceService implements NonceServiceInterface
      * @param string $namespace
      * @return NonceEntity
      */
-    private function _create(
+    private function createNonce(
         $nonce,
         NonceOwnerInterface $owner = null,
         DateInterval $expiresIn = null,
@@ -109,7 +109,15 @@ class NonceService implements NonceServiceInterface
         return $entity;
     }
 
-    private function _consume(
+    /**
+     * Consume a nonce entity
+     *
+     * @param $nonce
+     * @param NonceOwnerInterface|null $owner
+     * @param string $namespace
+     * @param RequestInterface|null $request
+     */
+    private function consumeNonce(
         $nonce,
         NonceOwnerInterface $owner = null,
         $namespace = 'default',
@@ -153,7 +161,7 @@ class NonceService implements NonceServiceInterface
     /**
      * {@Inheritdoc}
      */
-    public function createNonce(
+    public function create(
         NonceOwnerInterface $owner,
         $namespace = 'default',
         DateInterval $expiresIn = null,
@@ -163,19 +171,19 @@ class NonceService implements NonceServiceInterface
             $nonce = strtr(Rand::getString($length), '+/', '-_');
         } while ($this->repository->has($owner, $nonce, $namespace));
 
-        return $this->_create($owner, $expiresIn, $namespace);
+        return $this->createNonce($nonce, $owner, $expiresIn, $namespace);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createUnassociatedNonce($namespace = 'default', DateInterval $expiresIn = null, $length = 10)
+    public function createUnassociated($namespace = 'default', DateInterval $expiresIn = null, $length = 10)
     {
         do {
             $nonce = strtr(Rand::getString($length), '+/', '-_');
         } while ($this->repository->hasUnassociated($nonce, $namespace));
 
-        return $this->_create($nonce, null, $expiresIn, $namespace);
+        return $this->createNonce($nonce, null, $expiresIn, $namespace);
     }
 
     /**
@@ -187,7 +195,7 @@ class NonceService implements NonceServiceInterface
         $namespace = 'default',
         RequestInterface $request = null
     ) {
-        $this->_consume($nonce, $owner, $namespace, $request);
+        $this->consumeNonce($nonce, $owner, $namespace, $request);
     }
 
     /**
@@ -195,6 +203,6 @@ class NonceService implements NonceServiceInterface
      */
     public function consumeUnassociated($nonce, $namespace = 'default', RequestInterface $request = null)
     {
-        $this->_consume($nonce, null, $namespace, $request);
+        $this->consumeNonce($nonce, null, $namespace, $request);
     }
 }

@@ -57,7 +57,7 @@ interface NonceServiceInterface
      *
      * @return NonceEntity
      */
-    public function createNonce(
+    public function create(
         NonceOwnerInterface $owner,
         $namespace = 'default',
         DateInterval $expiresIn = null,
@@ -73,7 +73,7 @@ interface NonceServiceInterface
      *
      * @return NonceEntity
      */
-    public function createUnassociatedNonce($namespace = 'default', DateInterval $expiresIn = null, $length = 10);
+    public function createUnassociated($namespace = 'default', DateInterval $expiresIn = null, $length = 10);
 
     /**
      * Consume a nonce
