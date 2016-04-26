@@ -90,7 +90,7 @@ class NonceRepository implements NonceRepositoryInterface
 
     public function hasUnassociated($nonce, $namespace = 'default')
     {
-        return $this->getUnassociated($nonce, $namespace);
+        return $this->getUnassociated($nonce, $namespace) !== null;
     }
 
     /**
