@@ -38,6 +38,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
 
+use Doctrine\ORM\EntityManager;
 use Roave\NonceUtility\Factory\Repository\NonceRepositoryFactory;
 use Roave\NonceUtility\Factory\Service\NonceServiceFactory;
 use Roave\NonceUtility\Repository\NonceRepository;
@@ -45,6 +46,10 @@ use Roave\NonceUtility\Service\NonceService;
 
 return [
     'service_manager' => [
+        'aliases' => [
+            'Roave\NonceUtility\ObjectManager' => EntityManager::class
+        ],
+
         'factories' => [
             NonceService::class    => NonceServiceFactory::class,
             NonceRepository::class => NonceRepositoryFactory::class,
