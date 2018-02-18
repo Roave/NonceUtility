@@ -13,7 +13,7 @@
     "zendframework/zend-stdlib": "^2.5",
     "zendframework/zend-math": "^2.5",
     "zendframework/zend-http": "^2.5",
-    "doctrine/doctrine-module": "^0.9",
+    "doctrine/doctrine-module": "^0.9 || ^1.1",
     "php": ">=5.5.0"
   },
   "require-dev": {
