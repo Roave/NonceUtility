@@ -57,12 +57,23 @@ interface NonceServiceInterface
      *
      * @return NonceEntity
      */
-    public function createNonce(
+    public function create(
         NonceOwnerInterface $owner,
         $namespace = 'default',
         DateInterval $expiresIn = null,
         $length = 10
     );
+
+    /**
+     * Create a new nonce without an associated owner
+     *
+     * @param string $namespace
+     * @param DateInterval|null $expiresIn
+     * @param int $length
+     *
+     * @return NonceEntity
+     */
+    public function createUnassociated($namespace = 'default', DateInterval $expiresIn = null, $length = 10);
 
     /**
      * Consume a nonce
@@ -84,4 +95,15 @@ interface NonceServiceInterface
         $namespace = 'default',
         RequestInterface $request = null
     );
+
+    /**
+     * Consume a nonce without an associated owner
+     *
+     * @param string $nonce
+     * @param string $namespace
+     * @param RequestInterface|null $request
+     *
+     * @return void
+     */
+    public function consumeUnassociated($nonce, $namespace = 'default', RequestInterface $request = null);
 }

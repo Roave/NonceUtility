@@ -64,7 +64,7 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createNonce
+     * @covers ::create
      */
     public function testCreateNonceTestUniqueToken()
     {
@@ -87,13 +87,13 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $nonce = $this->service->createNonce($this->owner);
+        $nonce = $this->service->create($this->owner);
 
         $this->assertInstanceOf(NonceEntity::class, $nonce);
     }
 
     /**
-     * @covers ::createNonce
+     * @covers ::create
      */
     public function testCreateWithExpirationDate()
     {
@@ -111,14 +111,14 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('persist')
             ->with($this->isInstanceOf(NonceEntity::class));
 
-        $nonce = $this->service->createNonce($this->owner, 'default', $interval);
+        $nonce = $this->service->create($this->owner, 'default', $interval);
 
         $this->assertInstanceOf(NonceEntity::class, $nonce);
         $this->assertEquals($expectedDateTime, $nonce->getExpiresAt());
     }
 
     /**
-     * @covers ::createNonce
+     * @covers ::create
      */
     public function testCreateWithLength()
     {
@@ -134,7 +134,7 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('persist')
             ->with($this->isInstanceOf(NonceEntity::class));
 
-        $nonce = $this->service->createNonce($this->owner, 'default', null, $length);
+        $nonce = $this->service->create($this->owner, 'default', null, $length);
 
         $this->assertEquals($length, strlen($nonce->getNonce()));
     }
@@ -241,5 +241,185 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
             ->method('flush');
 
         $this->service->consume($this->owner, '');
+    }
+
+    /**
+     * @covers ::createUnassociated
+     */
+    public function testCreateUnassociatedNonceTestUniqueToken()
+    {
+        $this->repository
+            ->expects($this->at(0))
+            ->method('hasUnassociated')
+            ->will($this->returnValue(true));
+
+        $this->repository
+            ->expects($this->at(1))
+            ->method('hasUnassociated')
+            ->will($this->returnValue(false));
+
+        $this->objectManager
+            ->expects($this->once())
+            ->method('persist')
+            ->with($this->isInstanceOf(NonceEntity::class));
+
+        $this->objectManager
+            ->expects($this->once())
+            ->method('flush');
+
+        $nonce = $this->service->createUnassociated();
+
+        $this->assertInstanceOf(NonceEntity::class, $nonce);
+    }
+
+    /**
+     * @covers ::create
+     */
+    public function testCreateUnassociatedWithExpirationDate()
+    {
+        $interval         = new DateInterval('PT10M');
+        $expectedDateTime = new DateTime();
+        $expectedDateTime->add($interval);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('hasUnassociated')
+            ->will($this->returnValue(false));
+
+        $this->objectManager
+            ->expects($this->once())
+            ->method('persist')
+            ->with($this->isInstanceOf(NonceEntity::class));
+
+        $nonce = $this->service->createUnassociated('default', $interval);
+
+        $this->assertInstanceOf(NonceEntity::class, $nonce);
+        $this->assertEquals($expectedDateTime, $nonce->getExpiresAt());
+    }
+
+    /**
+     * @covers ::create
+     */
+    public function testCreateUnassociatedWithLength()
+    {
+        $length = 20;
+
+        $this->repository
+            ->expects($this->once())
+            ->method('hasUnassociated')
+            ->will($this->returnValue(false));
+
+        $this->objectManager
+            ->expects($this->once())
+            ->method('persist')
+            ->with($this->isInstanceOf(NonceEntity::class));
+
+        $nonce = $this->service->createUnassociated('default', null, $length);
+
+        $this->assertEquals($length, strlen($nonce->getNonce()));
+    }
+
+    /**
+     * @covers ::consumeUnassociated
+     */
+    public function testConsumeUnassociatedWithMissingNonce()
+    {
+        $this->setExpectedException(NonceNotFoundException::class);
+        $this->service->consumeUnassociated('');
+    }
+
+    /**
+     * @covers ::consumeUnassociated
+     */
+    public function testConsumeUnassociatedWithAlreadyConsumedNonce()
+    {
+        $nonce = new NonceEntity();
+        $nonce->setConsumedAt(new DateTime());
+
+        $this->repository
+            ->expects($this->once())
+            ->method('getUnassociated')
+            ->will($this->returnValue($nonce));
+
+        $this->setExpectedException(NonceAlreadyConsumedException::class);
+        $this->service->consumeUnassociated('nonce');
+    }
+
+    /**
+     * @covers ::consumeUnassociated
+     */
+    public function testConsumeUnassociatedWithExpiredNonce()
+    {
+        $yesterday = new DateTime();
+        $yesterday->modify('-1 days');
+
+        $nonce = new NonceEntity();
+        $nonce->setExpiresAt($yesterday);
+
+        $this->repository
+            ->expects($this->once())
+            ->method('getUnassociated')
+            ->will($this->returnValue($nonce));
+
+        $this->setExpectedException(NonceHasExpiredException::class);
+        $this->service->consumeUnassociated('nonce');
+    }
+
+    /**
+     * @covers ::consumeUnassociated
+     */
+    public function testConsumeUnassociatedWithHttpRequest()
+    {
+        $nonce = $this->getMock(NonceEntity::class);
+        $nonce
+            ->expects($this->once())
+            ->method('setConsumedAt')
+            ->with($this->isInstanceOf(DateTime::class));
+
+        $nonce
+            ->expects($this->once())
+            ->method('setHttpUserAgent')
+            ->with('awesome');
+
+        $this->repository
+            ->expects($this->once())
+            ->method('getUnassociated')
+            ->will($this->returnValue($nonce));
+
+        $this->objectManager
+            ->expects($this->once())
+            ->method('flush');
+
+        $request = new HttpRequest();
+        $request->getHeaders()->addHeaderLine('User-Agent', 'awesome');
+
+        $this->service->consumeUnassociated('', 'default', $request);
+    }
+
+    /**
+     * @covers ::consume
+     */
+    public function testConsumeUnassociated()
+    {
+        $nonce = $this->getMock(NonceEntity::class);
+        $nonce
+            ->expects($this->once())
+            ->method('setConsumedAt')
+            ->with($this->isInstanceOf(DateTime::class));
+
+        $nonce
+            ->expects($this->never())
+            ->method('setHttpUserAgent');
+
+        $this->repository
+            ->expects($this->once())
+            ->method('getUnassociated')
+            ->will($this->returnValue($nonce));
+
+        $this->objectManager
+            ->expects($this->once())
+            ->method('flush');
+
+        $this->service->consumeUnassociated('');
     }
 }

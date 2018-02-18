@@ -192,7 +192,7 @@ class NonceEntity
     /**
      * @param NonceOwnerInterface $owner
      */
-    public function setOwner(NonceOwnerInterface $owner)
+    public function setOwner(NonceOwnerInterface $owner = null)
     {
         $this->owner = $owner;
     }
