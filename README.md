@@ -12,7 +12,7 @@ A simple module that helps with managing nonces
 
 Install the module by adding the module to your composer file
 ```
-php composer.phar require roave/roave-nonce-utility:~1.0.0
+php composer.phar require roave/roave-nonce-utility:~2.0.0
 ```
 
 After this you must enable the module by adding `Roave\NonceUtility` to your
