@@ -40,6 +40,7 @@
 
 namespace Roave\NonceUtility\Factory\Service;
 
+use Interop\Container\ContainerInterface;
 use Roave\NonceUtility\Repository\NonceRepository;
 use Roave\NonceUtility\Service\NonceService;
 use Zend\ServiceManager\FactoryInterface;
@@ -60,5 +61,10 @@ class NonceServiceFactory implements FactoryInterface
             $serviceLocator->get('Roave\NonceUtility\ObjectManager'),
             $serviceLocator->get(NonceRepository::class)
         );
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NonceService
+    {
+        return $this->createService($container);
     }
 }

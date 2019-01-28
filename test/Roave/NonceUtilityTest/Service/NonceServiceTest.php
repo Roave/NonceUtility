@@ -114,7 +114,7 @@ class NonceServiceTest extends \PHPUnit_Framework_TestCase
         $nonce = $this->service->createNonce($this->owner, 'default', $interval);
 
         $this->assertInstanceOf(NonceEntity::class, $nonce);
-        $this->assertEquals($expectedDateTime, $nonce->getExpiresAt());
+        $this->assertEquals($expectedDateTime->getTimestamp(), $nonce->getExpiresAt()->getTimestamp());
     }
 
     /**
